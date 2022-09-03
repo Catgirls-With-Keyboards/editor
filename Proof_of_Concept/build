@@ -1,0 +1,3 @@
+#!/bin/sh
+cc test.c -g -fsanitize=address -fsanitize=undefined
+./a.out
