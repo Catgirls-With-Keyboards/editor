@@ -7,8 +7,8 @@
 #include <termios.h>
 #include <unistd.h>
 
-#ifndef tui_PANIC
-#define tui_PANIC() exit(1);
+#ifndef TUI_PANIC
+#define TUI_PANIC() exit(1);
 #endif
 
 #define MAX_COMPONENTS 64
@@ -156,7 +156,7 @@ static inline void updateSize(void) {
   if ((ws.ws_row > UINT16_MAX) | (ws.ws_col > UINT16_MAX)) {
     const char errmsg[] = "Tui can't handle a terminal this big.\n";
     fprintf(stderr, errmsg);
-    tui_PANIC();
+    TUI_PANIC();
   }
 #endif
   tui_globalcontext.window_width = (uint16_t)ws.ws_col;
@@ -247,7 +247,7 @@ static inline void tui_deinit(void) {
   char restore_term[] =
       "\x1b[?1049h"  // Return to alt buffer if we somehow escaped
       "\x1b[?1000l"  // No mouse events
-      "\x1b[2J"      // Clear screen
+    //"\x1b[2J"      // Clear screen
       "\x1b[?25h"    // Show cursor
       "\x1b[?1049l"; // Return to main buffer
   write(1, restore_term, sizeof(restore_term));
@@ -256,7 +256,7 @@ static inline void tui_deinit(void) {
 static inline void tui_error(const char *message) {
   tui_deinit();
   fprintf(stderr, "%s\n", message);
-  tui_PANIC();
+  TUI_PANIC();
 }
 
 static inline Event handle_event(void) {
